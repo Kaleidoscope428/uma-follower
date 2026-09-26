@@ -13,7 +13,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Clipboard from 'expo-clipboard';
 import { updateHomeScreenWidget } from './src/widgets/widget-service';
@@ -347,6 +347,7 @@ export default function App() {
 }
 
 function MainApp() {
+  const insets = useSafeAreaInsets();
   const [tab, setTab] = useState(0);
   const [data, setData] = useState<Profile>(SAMPLE_PROFILE);
   const [playerId, setPlayerId] = useState('859187447909');
@@ -626,7 +627,7 @@ function MainApp() {
       </ScrollView>
 
       {/* Bottom Tabs */}
-      <View style={styles.tabs}>
+      <View style={[styles.tabs, { paddingBottom: Math.max(10, insets.bottom + 6) }]}>
         {['⌂', '↗', '◎', '⏰', '⚙'].map((icon, i) => (
           <Pressable
             key={icon}
