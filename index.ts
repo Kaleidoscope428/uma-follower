@@ -1,8 +1,14 @@
 import { registerRootComponent } from 'expo';
-
 import App from './App';
 
-// registerRootComponent calls AppRegistry.registerComponent('main', () => App);
-// It also ensures that whether you load the app in Expo Go or in a native build,
-// the environment is set up appropriately
+try {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { registerWidgetTaskHandler } = require('react-native-android-widget');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { widgetTaskHandler } = require('./src/widgets/widget-task-handler');
+  registerWidgetTaskHandler(widgetTaskHandler);
+} catch {
+  // Ignored in Expo Go
+}
+
 registerRootComponent(App);

@@ -1,25 +1,51 @@
 {
   "expo": {
-    "name": "uma-follower",
+    "name": "Uma Follower",
     "slug": "uma-follower",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/riceicon.png",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "package": "com.umafollower.app",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
+        "foregroundImage": "./assets/riceicon.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
+      "favicon": "./assets/ricefav.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8a90762c-15b1-4fca-b1dc-fa4b3900a9a7"
+      }
+    },
+    "plugins": [
+      [
+        "react-native-android-widget",
+        {
+          "widgets": [
+            {
+              "name": "UmaWidget",
+              "label": "Uma Follower",
+              "minWidth": "160dp",
+              "minHeight": "90dp",
+              "targetCellWidth": 2,
+              "targetCellHeight": 2,
+              "description": "Theo dõi nhanh số fan và trainer Uma Musume",
+              "previewImage": "./assets/riceicon.png",
+              "updatePeriodMillis": 3600000
+            }
+          ]
+        }
+      ]
+    ]
   }
 }
