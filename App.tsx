@@ -1297,9 +1297,13 @@ function Widget({
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <View>
-      <Text style={styles.statValue}>{value}</Text>
-      <Text style={styles.statLabel}>{label}</Text>
+    <View style={styles.totalStatItem}>
+      <Text numberOfLines={1} adjustsFontSizeToFit style={styles.statValue}>
+        {value}
+      </Text>
+      <Text numberOfLines={1} style={styles.statLabel}>
+        {label}
+      </Text>
     </View>
   );
 }
@@ -1876,17 +1880,32 @@ const styles = StyleSheet.create({
   totalStats: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    gap: 8,
+  },
+  totalStatItem: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.06)',
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    borderWidth: 1,
+    borderRadius: 14,
+    paddingVertical: 10,
+    paddingHorizontal: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   statValue: {
     color: '#F4FAFF',
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '900',
+    textAlign: 'center',
   },
   statLabel: {
     color: '#9AB4D1',
-    fontSize: 8,
+    fontSize: 8.5,
     fontWeight: '800',
     marginTop: 4,
+    textAlign: 'center',
+    letterSpacing: 0.4,
   },
   card: {
     backgroundColor: '#10272B',
