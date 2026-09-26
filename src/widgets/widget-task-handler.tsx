@@ -5,26 +5,36 @@ import { UmaWidget, UmaWidgetProps } from './UmaWidget';
 import { STORAGE_KEY_WIDGET_DATA } from './widget-service';
 
 export async function widgetTaskHandler(props: WidgetTaskHandlerProps) {
-  const { widgetInfo, renderWidget } = props;
+  const { widgetAction, renderWidget } = props;
 
-  if (widgetInfo.widgetName === 'UmaWidget') {
-    let widgetProps: UmaWidgetProps = {
-      trainerName: 'Uma Trainer',
-      totalFans: '0',
-      monthlyGain: '+0',
-      rank: '#--',
-      lastUpdated: '--:--',
-    };
-
-    try {
-      const saved = await AsyncStorage.getItem(STORAGE_KEY_WIDGET_DATA);
-      if (saved) {
-        widgetProps = { ...widgetProps, ...JSON.parse(saved) };
-      }
-    } catch {
-      // Fallback to default
-    }
-
-    renderWidget(<UmaWidget {...widgetProps} />);
+  if (widgetAction === 'WIDGET_DELETED') {
+    return;
   }
+
+  let widgetProps: UmaWidgetProps = {
+    trainerName: 'Uma Trainer',
+    totalFans: '0',
+    monthlyGain: '+0',
+    rank: '#--',
+    lastUpdated: '--:--',
+    avatarUri: null,
+  };
+
+  try {
+    const [savedData, savedAvatar] = await Promise.all([
+      AsyncStorage.getItem(STORAGE_KEY_WIDGET_DATA),
+      AsyncStorage.getItem('@uma_user_avatar'),
+    ]);
+
+    if (savedData) {
+      widgetProps = { ...widgetProps, ...JSON.parse(savedData) };
+    }
+    if (!widgetProps.avatarUri && savedAvatar) {
+      widgetProps.avatarUri = savedAvatar;
+    }
+  } catch {
+    // Fallback to defaults
+  }
+
+  renderWidget(<UmaWidget {...widgetProps} />);
 }

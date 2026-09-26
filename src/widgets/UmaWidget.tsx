@@ -34,11 +34,15 @@ export function UmaWidget({
     if (avatarUri === 'preset:big_wind') {
       return require('../../assets/example_avt/bigwind.jpg');
     }
-    return { uri: avatarUri };
+    if (avatarUri.startsWith('http://') || avatarUri.startsWith('https://') || avatarUri.startsWith('data:image')) {
+      return avatarUri;
+    }
+    return require('../../assets/example_avt/avt.jpg');
   };
 
   return (
     <FlexWidget
+      clickAction="OPEN_APP"
       style={{
         height: 'match_parent',
         width: 'match_parent',

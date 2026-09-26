@@ -502,8 +502,17 @@ function MainApp() {
 
         setPlayerId(finalId);
         setApiKey(finalKey);
-        if (savedLastRefresh) setLastRefreshedAt(savedLastRefresh);
         if (savedAvatar) setUserAvatar(savedAvatar);
+
+        const latestMonth = data.fan_history?.monthly?.[0] || SAMPLE_PROFILE.fan_history?.monthly?.[0];
+        void updateHomeScreenWidget({
+          trainerName: data.trainer?.name ? String(data.trainer.name) : 'Uma Trainer',
+          totalFans: num(data.trainer?.follower_num || SAMPLE_PROFILE.trainer?.follower_num),
+          monthlyGain: `+${num(latestMonth?.monthly_gain)}`,
+          rank: `#${num(latestMonth?.rank ?? data.fan_history?.alltime?.rank)}`,
+          lastUpdated: savedLastRefresh ? savedLastRefresh.split(' - ')[0] : '--:--',
+          avatarUri: savedAvatar,
+        });
 
         if (finalKey) {
           void loadData(finalId, finalKey);

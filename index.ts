@@ -1,14 +1,7 @@
 import { registerRootComponent } from 'expo';
+import { registerWidgetTaskHandler } from 'react-native-android-widget';
 import App from './App';
+import { widgetTaskHandler } from './src/widgets/widget-task-handler';
 
-try {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { registerWidgetTaskHandler } = require('react-native-android-widget');
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { widgetTaskHandler } = require('./src/widgets/widget-task-handler');
-  registerWidgetTaskHandler(widgetTaskHandler);
-} catch {
-  // Ignored in Expo Go
-}
-
+registerWidgetTaskHandler(widgetTaskHandler);
 registerRootComponent(App);
