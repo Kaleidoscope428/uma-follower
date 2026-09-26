@@ -1063,14 +1063,20 @@ function Growth({ data }: { data: Profile }) {
       <Heading title="Mốc theo dõi" note="Rolling" />
       <View style={styles.rolling}>
         {[
-          [rolling.gain_3d, '3 ngày', rolling.rank_3d],
-          [rolling.gain_7d, '7 ngày', rolling.rank_7d],
-          [rolling.gain_30d, '30 ngày', rolling.rank_30d],
-        ].map(([v, label, rank]) => (
-          <View key={String(label)}>
-            <Text style={styles.rollValue}>+{num(v as number)}</Text>
-            <Text style={styles.rollLabel}>{String(label)}</Text>
-            <Text style={styles.rollRank}>#{num(rank as number)}</Text>
+          { v: rolling.gain_3d, label: '3 NGÀY', rank: rolling.rank_3d, color: '#E5B8FF' },
+          { v: rolling.gain_7d, label: '7 NGÀY', rank: rolling.rank_7d, color: '#91C8FF' },
+          { v: rolling.gain_30d, label: '30 NGÀY', rank: rolling.rank_30d, color: '#7DF3C0' },
+        ].map(({ v, label, rank, color }) => (
+          <View key={label} style={styles.rollItem}>
+            <Text style={[styles.rollLabel, { color }]}>{label}</Text>
+            <Text numberOfLines={1} adjustsFontSizeToFit style={styles.rollValue}>
+              +{num(v)}
+            </Text>
+            <View style={styles.rollRankBadge}>
+              <Text numberOfLines={1} style={styles.rollRank}>
+                #{num(rank)}
+              </Text>
+            </View>
           </View>
         ))}
       </View>
@@ -1078,22 +1084,36 @@ function Growth({ data }: { data: Profile }) {
       <Heading title="Circle theo tháng" note={data.circle?.name || 'Lịch sử Circle'} />
       <View style={styles.card}>
         {circleHistory.length > 0 ? (
-          circleHistory.slice(0, 4).map((x, i) => {
+          circleHistory.slice(0, 6).map((x, i) => {
             const hRankInfo = getCircleRankInfo(x.circle_rank);
+            const isLast = i === Math.min(circleHistory.length, 6) - 1;
             return (
-              <View key={`${x.year}-${x.month}`} style={styles.history}>
+              <View
+                key={`${x.year}-${x.month}`}
+                style={[styles.historyRow, !isLast && styles.historyRowBorder]}
+              >
                 <View style={[styles.accent, i === 0 && styles.accentActive]} />
                 {hRankInfo ? (
                   <Image source={hRankInfo.image} style={styles.historyRankIcon} resizeMode="contain" />
                 ) : null}
-                <Text style={styles.historyMonth}>
-                  {String(x.month).padStart(2, '0')}/{x.year}
-                </Text>
-                <Text numberOfLines={1} style={styles.historyName}>
-                  {x.circle_name ? String(x.circle_name) : '—'}
-                </Text>
-                <Text style={styles.historyPoints}>{num(x.circle_points)}</Text>
-                <Text style={styles.historyRank}>#{num(x.circle_rank)}</Text>
+                <View style={styles.historyMonthCol}>
+                  <Text style={styles.historyMonth}>
+                    {String(x.month).padStart(2, '0')}/{x.year}
+                  </Text>
+                </View>
+                <View style={styles.historyNameCol}>
+                  <Text numberOfLines={1} style={styles.historyName}>
+                    {x.circle_name ? String(x.circle_name) : '—'}
+                  </Text>
+                </View>
+                <View style={styles.historyRightCol}>
+                  <Text numberOfLines={1} style={styles.historyPoints}>
+                    {num(x.circle_points)} fan
+                  </Text>
+                  <Text numberOfLines={1} style={styles.historyRank}>
+                    #{num(x.circle_rank)}
+                  </Text>
+                </View>
               </View>
             );
           })
@@ -1957,68 +1977,98 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   rolling: {
-    backgroundColor: '#10272B',
-    borderRadius: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    gap: 10,
     marginBottom: 24,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: '#173639',
   },
-  rollValue: {
-    color: '#F5FAF8',
-    fontSize: 17,
-    fontWeight: '900',
+  rollItem: {
+    flex: 1,
+    backgroundColor: '#10272B',
+    borderColor: '#173639',
+    borderWidth: 1,
+    borderRadius: 18,
+    paddingVertical: 12,
+    paddingHorizontal: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   rollLabel: {
-    color: '#86A6A3',
-    fontSize: 10,
-    marginTop: 4,
+    fontSize: 9,
+    fontWeight: '900',
+    letterSpacing: 0.5,
+    marginBottom: 4,
+  },
+  rollValue: {
+    color: '#F4FAF8',
+    fontSize: 15,
+    fontWeight: '900',
+    textAlign: 'center',
+  },
+  rollRankBadge: {
+    backgroundColor: 'rgba(125, 243, 192, 0.12)',
+    borderRadius: 6,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    marginTop: 6,
   },
   rollRank: {
     color: '#7DF3C0',
     fontSize: 10,
     fontWeight: '800',
-    marginTop: 8,
   },
-  history: {
+  historyRow: {
     alignItems: 'center',
     flexDirection: 'row',
-    minHeight: 40,
+    paddingVertical: 10,
+    gap: 8,
+  },
+  historyRowBorder: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#173639',
   },
   accent: {
     backgroundColor: '#597C7C',
     borderRadius: 3,
     height: 20,
-    marginRight: 8,
-    width: 4,
+    width: 3.5,
   },
   accentActive: {
     backgroundColor: '#7DF3C0',
   },
+  historyMonthCol: {
+    minWidth: 44,
+  },
   historyMonth: {
     color: '#D8EBE7',
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: '800',
-    width: 48,
+  },
+  historyNameCol: {
+    flex: 1,
+    paddingRight: 6,
   },
   historyName: {
     color: '#86A6A3',
-    flex: 1,
-    fontSize: 10,
+    fontSize: 11,
+    fontWeight: '600',
+  },
+  historyRightCol: {
+    alignItems: 'flex-end',
+    justifyContent: 'center',
   },
   historyPoints: {
     color: '#F4FAF8',
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: '800',
-    width: 55,
+    textAlign: 'right',
   },
   historyRank: {
     color: '#7DF3C0',
     fontSize: 10,
+    fontWeight: '800',
     textAlign: 'right',
-    width: 27,
+    marginTop: 2,
   },
   identity: {
     alignItems: 'center',
