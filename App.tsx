@@ -211,6 +211,7 @@ const STORAGE_KEYS = {
 };
 
 const ENV_API_KEY = process.env.EXPO_PUBLIC_API_KEY || '';
+const COMMUNITY_API_KEY = 'uma_k_ZXqR3qvtctjVsU1SkZAvNaQ82BNbOTAZGLeqYa7i7mLlJF8h';
 const profileUrl = (accountId: string) =>
   `https://uma.moe/api/v4/user/profile/${encodeURIComponent(accountId)}`;
 
@@ -789,11 +790,12 @@ function SettingsTab({
             <Text style={styles.presetChipText}>ID Mẫu</Text>
           </Pressable>
 
-          {ENV_API_KEY ? (
-            <Pressable style={styles.presetChip} onPress={() => setInputKey(ENV_API_KEY)}>
-              <Text style={styles.presetChipText}>Dùng Env Key</Text>
-            </Pressable>
-          ) : null}
+          <Pressable
+            style={[styles.presetChip, styles.communityKeyChip]}
+            onPress={() => setInputKey(COMMUNITY_API_KEY)}
+          >
+            <Text style={[styles.presetChipText, styles.communityKeyText]}>🔑 API Cộng đồng</Text>
+          </Pressable>
 
           <Pressable style={styles.presetChip} onPress={() => setInputKey('')}>
             <Text style={styles.presetChipText}>Xóa Key</Text>
@@ -2240,6 +2242,15 @@ const styles = StyleSheet.create({
     color: '#B8E5DE',
     fontSize: 11,
     fontWeight: '700',
+  },
+  communityKeyChip: {
+    backgroundColor: 'rgba(125, 243, 192, 0.15)',
+    borderColor: '#7DF3C0',
+    borderWidth: 1,
+  },
+  communityKeyText: {
+    color: '#7DF3C0',
+    fontWeight: '800',
   },
   saveConfigBtn: {
     backgroundColor: '#7DF3C0',
